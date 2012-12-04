@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <script src="jquery-1.8.3.js"></script>
+        <link rel="stylesheet" type="text/css" href="dms.css">
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $.ajax({
+                    url: "/dms/docs"
+                }).done(function( html ) {
+                    $("#results").append(html);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <ul>
+            <li><a href="">Register</a></li>
+            <li><a href="">Delete</a></li>
+        </ul>
+
+        <div class="msg"></div>
+    </body>
+</html>
