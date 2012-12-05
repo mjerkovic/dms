@@ -3,7 +3,10 @@ package com.mlj.events;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class EventStore {
 
@@ -16,4 +19,9 @@ public class EventStore {
     public Collection<Event> eventsFor(String id) {
         return events.get(id);
     }
+
+    public Map<String, Collection<Event>> allEvents() {
+        return events.asMap();
+    }
+
 }

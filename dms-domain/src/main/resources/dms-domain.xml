@@ -19,4 +19,8 @@
         <constructor-arg ref="eventPublisher"/>
     </bean>
 
+    <bean id="documentListView" class="com.mlj.views.DocumentListView">
+        <constructor-arg ref="documentRepository"/>
+    </bean>
+
 </beans>

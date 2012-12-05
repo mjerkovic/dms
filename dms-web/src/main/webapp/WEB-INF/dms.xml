@@ -11,6 +11,7 @@
 
     <bean class="com.mlj.dms.DocumentManagementControl">
         <constructor-arg ref="documentRegistrationService"/>
+        <constructor-arg ref="documentListView"/>
     </bean>
 
 </beans>

@@ -2,12 +2,16 @@ package com.mlj.dms;
 
 import com.mlj.documents.DocumentRegistrationService;
 import com.mlj.documents.RegisterDocumentCommand;
+import com.mlj.views.DocumentDto;
+import com.mlj.views.DocumentListView;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -17,15 +21,18 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class DocumentManagementControl {
 
     private final DocumentRegistrationService documentRegistrationService;
+    private final DocumentListView documentListView;
 
-    public DocumentManagementControl(DocumentRegistrationService documentRegistrationService) {
+    public DocumentManagementControl(DocumentRegistrationService documentRegistrationService,
+                                     DocumentListView documentListView) {
         this.documentRegistrationService = documentRegistrationService;
+        this.documentListView = documentListView;
     }
 
-    @RequestMapping(method = GET)
+    @RequestMapping(method = GET, produces = "application/json")
     @ResponseBody
-    public String list() {
-        return "Hello World";
+    public List<DocumentDto> list() {
+        return documentListView.list();
     }
 
     @RequestMapping(method = POST, consumes = "application/json")
