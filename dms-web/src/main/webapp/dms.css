@@ -17,3 +17,24 @@ a {
 a, u {
     text-decoration: none;
 }
+
+table, th, td {
+    border: 1px solid black;
+}
+
+table  {
+    width:100%;
+}
+th {
+    height:50px;
+    padding:15px;
+    background-color:green;
+    color:white;
+}
+
+td {
+    text-align:center;
+    height:50px;
+    vertical-align:bottom;
+    padding:15px;
+}
