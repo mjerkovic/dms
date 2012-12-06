@@ -9,11 +9,13 @@
                     url: "/dms/docs",
                     dataType: "json"
                 }).done(function( html ) {
-                    var row = $("<tr />");
-                    $("<td />").text(html[0].documentNo).appendTo(row);
-                    $("<td />").text(html[0].title).appendTo(row);
-                    $("<td />").text(html[0].revision).appendTo(row);
-                    row.appendTo("#results");
+                    html.map(function(doc) {
+                        var row = $("<tr />");
+                        $("<td />").text(doc.documentNo).appendTo(row);
+                        $("<td />").text(doc.title).appendTo(row);
+                        $("<td />").text(doc.revision).appendTo(row);
+                        row.appendTo("#results");
+                    });
                 });
             });
         </script>
