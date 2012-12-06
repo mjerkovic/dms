@@ -6,9 +6,14 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 $.ajax({
-                    url: "/dms/docs"
+                    url: "/dms/docs",
+                    dataType: "json"
                 }).done(function( html ) {
-                    $("#results").append(html);
+                    var row = $("<tr />");
+                    $("<td />").text(html[0].documentNo).appendTo(row);
+                    $("<td />").text(html[0].title).appendTo(row);
+                    $("<td />").text(html[0].revision).appendTo(row);
+                    row.appendTo("#results");
                 });
             });
         </script>
@@ -19,6 +24,8 @@
             <li><a href="">Delete</a></li>
         </ul>
 
-        <div class="msg"></div>
+        <table id="results">
+
+        </table>
     </body>
 </html>
