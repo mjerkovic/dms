@@ -47,7 +47,7 @@ public class DocumentManagementControl {
 
     @RequestMapping(method = PUT, value = "/{documentId}", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void supersede(@PathVariable String documentId, SupersedeDocumentCommand command) {
+    public void supersede(@PathVariable String documentId, @RequestBody SupersedeDocumentCommand command) {
         documentRegistrationService.supersedeDocument(documentId, command);
     }
 

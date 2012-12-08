@@ -1,11 +1,13 @@
 package com.mlj.documents;
 
+import com.google.common.collect.Lists;
 import com.mlj.events.Event;
 import com.mlj.events.EventStore;
 
 import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.reverse;
 
 public class DocumentRepository {
 
@@ -69,7 +71,7 @@ public class DocumentRepository {
             document.markCommitted();
             documentHistory.add(document);
         }
-        return documentHistory;
+        return reverse(documentHistory);
     }
 
 }

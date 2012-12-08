@@ -2,15 +2,9 @@ package com.mlj.documents;
 
 public class SupersedeDocumentCommand {
 
-    private String documentId;
     private String documentNo;
     private String title;
     private String revision;
-
-
-    public String getDocumentId() {
-        return documentId;
-    }
 
     public String getDocumentNo() {
         return documentNo;
