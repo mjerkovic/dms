@@ -1,20 +1,21 @@
 package com.mlj.documents;
 
-import com.mlj.events.EventPublisher;
+import com.mlj.events.EventStore;
 
 public class DocumentRegistrationService {
 
     private final DocumentRepository documentRepository;
-    private final EventPublisher eventPublisher;
 
-    public DocumentRegistrationService(DocumentRepository documentRepository, EventPublisher eventPublisher) {
+    public DocumentRegistrationService(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
-        this.eventPublisher = eventPublisher;
     }
 
     public void registerDocument(RegisterDocumentCommand registerDocumentCommand) {
-        Document document = documentRepository.registerDocument(registerDocumentCommand);
-        eventPublisher.publish(new DocumentRegisteredEvent(document.getDocumentId(), document.getDocumentNo(),
-                document.getTitle(), document.getRevision()));
+        documentRepository.registerDocument(registerDocumentCommand);
     }
+
+    public void supersedeDocument(String id, SupersedeDocumentCommand command) {
+        documentRepository.supersedeDocument(id, command);
+    }
+
 }

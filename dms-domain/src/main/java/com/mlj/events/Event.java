@@ -1,6 +1,6 @@
 package com.mlj.events;
 
-public abstract class Event<T> {
+public abstract class Event {
 
     private final String id;
 
@@ -12,5 +12,4 @@ public abstract class Event<T> {
         return id;
     }
 
-    public abstract void applyTo(T object);
 }

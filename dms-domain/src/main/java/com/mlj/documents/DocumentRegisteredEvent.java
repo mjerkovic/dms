@@ -2,7 +2,7 @@ package com.mlj.documents;
 
 import com.mlj.events.Event;
 
-public class DocumentRegisteredEvent extends Event<Document> {
+public class DocumentRegisteredEvent extends Event {
 
     private String documentNo;
     private final String title;
@@ -15,11 +15,6 @@ public class DocumentRegisteredEvent extends Event<Document> {
         this.revision = revision;
     }
 
-    @Override
-    public void applyTo(Document object) {
-        object.apply(this);
-    }
-
     public String getDocumentNo() {
         return documentNo;
     }
@@ -30,10 +25,6 @@ public class DocumentRegisteredEvent extends Event<Document> {
 
     public String getRevision() {
         return revision;
-    }
-
-    public String getEventName() {
-        return getClass().getName();
     }
 
 }

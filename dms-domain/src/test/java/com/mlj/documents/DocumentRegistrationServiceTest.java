@@ -1,7 +1,6 @@
 package com.mlj.documents;
 
 import com.google.common.collect.Lists;
-import com.mlj.events.EventPublisher;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +19,11 @@ public class DocumentRegistrationServiceTest {
 
     private DocumentRegistrationService registrationService;
     private DocumentRepository documentRepository;
-    private EventPublisher eventPublisher;
 
     @Before
     public void givenADocumentRegistrationService() {
         documentRepository = mock(DocumentRepository.class);
-        eventPublisher = mock(EventPublisher.class);
-        registrationService = new DocumentRegistrationService(documentRepository, eventPublisher);
+        registrationService = new DocumentRegistrationService(documentRepository);
     }
 
     @Test

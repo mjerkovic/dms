@@ -6,6 +6,8 @@ import com.mlj.events.Event;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 public class Document {
 
     private final String documentId;
@@ -14,16 +16,22 @@ public class Document {
     private String revision;
     private int version;
 
-    private List<Event> uncommittedEvents = Lists.newArrayList();
+    private List<Event> uncommittedEvents = newArrayList();
 
     public Document(String documentId) {
         this.documentId = documentId;
     }
+
     public Document(String documentId, String documentNo, String title, String revision) {
         this(documentId);
         this.documentNo = documentNo;
         this.title = title;
         this.revision = revision;
+    }
+
+    public Document(String documentId, String documentNo, String title, String revision, List<Event> events) {
+        this(documentId, documentNo, title, revision);
+        this.uncommittedEvents = newArrayList(events);
     }
 
     public String getDocumentId() {
@@ -42,18 +50,31 @@ public class Document {
         return revision;
     }
 
-    public void apply(DocumentRegisteredEvent event) {
-        this.documentNo = event.getDocumentNo();
-        this.title = event.getTitle();
-        this.revision = event.getRevision();
-        uncommittedEvents.add(event);
+    public List<Event> getUncommittedEvents() {
+        return newArrayList(uncommittedEvents);
     }
 
-    public void apply(DocumentSupersededEvent event) {
-        this.documentNo = event.getDocumentNo();
-        this.title = event.getTitle();
-        this.revision = event.getRevision();
-        uncommittedEvents.add(event);
+    public Document register(RegisterDocumentCommand registerDocumentCommand) {
+        return apply(new DocumentRegisteredEvent(documentId, registerDocumentCommand.getDocumentNo(),
+                registerDocumentCommand.getTitle(), registerDocumentCommand.getRevision()));
+    }
+
+    public Document supersede(SupersedeDocumentCommand supersedeDocumentCommand) {
+        return apply(new DocumentSupersededEvent(documentId, supersedeDocumentCommand.getDocumentNo(),
+                supersedeDocumentCommand.getTitle(), supersedeDocumentCommand.getRevision()));
+    }
+
+
+    public Document apply(DocumentRegisteredEvent event) {
+        Document document = new Document(documentId, event.getDocumentNo(), event.getTitle(), event.getRevision(), uncommittedEvents);
+        document.uncommittedEvents.add(event);
+        return document;
+    }
+
+    public Document apply(DocumentSupersededEvent event) {
+        Document document = new Document(documentId, event.getDocumentNo(), event.getTitle(), event.getRevision(), uncommittedEvents);
+        document.uncommittedEvents.add(event);
+        return document;
     }
 
     public void markCommitted() {

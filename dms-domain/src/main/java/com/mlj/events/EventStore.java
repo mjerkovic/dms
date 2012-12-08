@@ -2,6 +2,7 @@ package com.mlj.events;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.mlj.documents.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +13,11 @@ public class EventStore {
 
     private final Multimap<String, Event> events = ArrayListMultimap.create();
 
-    public void store(Event event) {
-        events.put(event.getId(), event);
+    public void store(Document document) {
+        for (Event event : document.getUncommittedEvents()) {
+            events.put(event.getId(), event);
+        }
+        document.markCommitted();
     }
 
     public Collection<Event> eventsFor(String id) {

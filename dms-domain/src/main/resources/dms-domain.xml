@@ -10,16 +10,15 @@
         <constructor-arg ref="eventStore"/>
     </bean>
 
-    <bean id="eventPublisher" class="com.mlj.events.EventPublisher">
-        <constructor-arg ref="eventStore"/>
-    </bean>
-
     <bean id="documentRegistrationService" class="com.mlj.documents.DocumentRegistrationService">
         <constructor-arg ref="documentRepository"/>
-        <constructor-arg ref="eventPublisher"/>
     </bean>
 
     <bean id="documentListView" class="com.mlj.views.DocumentListView">
+        <constructor-arg ref="documentRepository"/>
+    </bean>
+
+    <bean id="documentHistoryView" class="com.mlj.views.DocumentHistoryView">
         <constructor-arg ref="documentRepository"/>
     </bean>
 

@@ -8,16 +8,27 @@
                 $.ajax({
                     url: "/dms/docs",
                     dataType: "json"
-                }).done(function( html ) {
-                    html.map(function(doc) {
+                }).success(function(html) {
+                    html.map(function(dto) {
                         var row = $("<tr />");
-                        $("<td />").text(doc.documentNo).appendTo(row);
-                        $("<td />").text(doc.title).appendTo(row);
-                        $("<td />").text(doc.revision).appendTo(row);
+                        $("<td />").text(dto.document.documentNo).appendTo(row);
+                        $("<td />").text(dto.document.title).appendTo(row);
+                        $("<td />").text(dto.document.revision).appendTo(row);
+                        $("<td />").append($("<a href='javascript:getHistory(&quot;" + dto.links[0].uri + "&quot;);'>History</a>")).appendTo(row);
                         row.appendTo("#results");
                     });
                 });
             });
+
+            function getHistory(uri) {
+                $.ajax({
+                    url: uri,
+                    dataType: "json"
+                }).success(function(response) {
+                    alert(response[0].document.documentId);
+                });
+            }
+
         </script>
     </head>
     <body>
@@ -28,7 +39,7 @@
         <br/>
         <br/>
         <table id="results">
-            <tr><th>Document No.</th><th>Title</th><th>Revision</th></tr>
+            <tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr>
         </table>
     </body>
 </html>

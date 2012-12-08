@@ -5,6 +5,9 @@ import com.mlj.documents.DocumentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 public class DocumentListView {
 
@@ -14,10 +17,10 @@ public class DocumentListView {
         this.repository = repository;
     }
 
-    public List<DocumentDto> list() {
-        List<DocumentDto> result = new ArrayList<DocumentDto>();
+    public List<DocumentResource> list() {
+        List<DocumentResource> result = new ArrayList<DocumentResource>();
         for (Document document : repository.allDocuments()) {
-            result.add(dtoFor(document));
+            result.add(new DocumentResource(dtoFor(document), historyLinkFor(document)));
         }
         return result;
     }
@@ -25,6 +28,10 @@ public class DocumentListView {
     private DocumentDto dtoFor(Document document) {
         return new DocumentDto(document.getDocumentId(), document.getDocumentNo(),
                 document.getTitle(), document.getRevision());
+    }
+
+    private Set<Link> historyLinkFor(Document document) {
+        return newHashSet(new Link("history", "http://localhost:8080/dms/docs/"+document.getDocumentId() + "/history"));
     }
 
 }

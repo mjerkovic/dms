@@ -2,7 +2,7 @@ package com.mlj.documents;
 
 import com.mlj.events.Event;
 
-public class DocumentSupersededEvent extends Event<Document> {
+public class DocumentSupersededEvent extends Event {
 
     private String documentNo;
     private final String title;
@@ -13,11 +13,6 @@ public class DocumentSupersededEvent extends Event<Document> {
         this.documentNo = documentNo;
         this.title = title;
         this.revision = revision;
-    }
-
-    @Override
-    public void applyTo(Document object) {
-        object.apply(this);
     }
 
     public String getDocumentNo() {

@@ -15,13 +15,13 @@ public class DocumentRepositoryTest {
 
     @Test
     public void itShouldRetrieveADocument() {
-        RegisterDocumentCommand command = new RegisterDocumentCommand();
+        /*RegisterDocumentCommand command = new RegisterDocumentCommand();
         command.setDocumentNo("DOC-000001");
         command.setTitle("First one");
         command.setRevision("A");
         Document expected = documentRepository.registerDocument(command);
         Document result = documentRepository.retrieveDocument(expected.getDocumentId());
         System.out.println("expected = " + expected);
-        System.out.println("result = " + result);
+        System.out.println("result = " + result);*/
     }
 }
