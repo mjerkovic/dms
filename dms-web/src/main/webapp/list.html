@@ -1,31 +1,47 @@
 <html>
     <head>
         <script src="jquery-1.8.3.js"></script>
+        <script src="jquery-ui-1.9.2.custom.js"></script>
         <link rel="stylesheet" type="text/css" href="dms.css">
+        <link rel="stylesheet" type="text/css" href="jquery-ui-1.9.2.custom.css">
 
         <script type="text/javascript">
             $(document).ready(function(){
+                $( "#dialog-modal" ).dialog({
+                    autoOpen: false,
+                    height: "auto",
+                    width: 1060,
+                    modal: true
+                });
                 $.ajax({
                     url: "/dms/docs",
                     dataType: "json"
                 }).success(function(html) {
-                    html.map(function(dto) {
-                        var row = $("<tr />");
-                        $("<td />").text(dto.document.documentNo).appendTo(row);
-                        $("<td />").text(dto.document.title).appendTo(row);
-                        $("<td />").text(dto.document.revision).appendTo(row);
-                        $("<td />").append($("<a href='javascript:getHistory(&quot;" + dto.links[0].uri + "&quot;);'>History</a>")).appendTo(row);
-                        row.appendTo("#results");
-                    });
+                    createRows(html, "#results", true);
                 });
             });
+
+            function createRows(response, table, includeHistoryLink) {
+                response.map(function(dto) {
+                    var row = $("<tr />");
+                    $("<td />").text(dto.document.documentNo).appendTo(row);
+                    $("<td />").text(dto.document.title).appendTo(row);
+                    $("<td />").text(dto.document.revision).appendTo(row);
+                    if (includeHistoryLink) {
+                        $("<td />").append($("<a href='javascript:getHistory(&quot;" + dto.links[0].uri + "&quot;);'>History</a>")).appendTo(row);
+                    }
+                    row.appendTo(table);
+                });
+
+            }
 
             function getHistory(uri) {
                 $.ajax({
                     url: uri,
                     dataType: "json"
                 }).success(function(response) {
-                    alert(response[0].document.documentId);
+                    createRows(response, "#historyTable", false);
+                    $( "#dialog-modal" ).dialog("open");
                 });
             }
 
@@ -41,5 +57,12 @@
         <table id="results">
             <tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr>
         </table>
+
+        <div id="dialog-modal" title="Basic modal dialog">
+            <table id="historyTable">
+                <tr><th>Document No.</th><th>Title</th><th>Revision</th>s</tr>
+            </table>
+        </div>
+
     </body>
 </html>
