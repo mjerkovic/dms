@@ -14,18 +14,7 @@
                     modal: true
                 });
                 $( "#supersedePanel" ).dialog({
-                    autoOpen: false,
-                    height: "auto",
-                    width: "50%",
-                    modal: true,
-                    close: function(event, ui) {
-                        loadDocuments();
-                    },
-                    buttons: {
-                        "Supersede": function() {
-                            $(this).dialog("close")
-                        }
-                    }
+                    autoOpen: false
                 });
                 loadDocuments();
             });
@@ -69,7 +58,28 @@
                 $("#documentNo").val(documentNo);
                 $("#title").val(title);
                 $("#revision").val(revision);
+                $( "#supersedePanel" ).dialog({
+                    height: "auto",
+                    width: "50%",
+                    modal: true,
+                    buttons: {
+                        "Supersede": function() {
+                            supersedeDocuments(uri);
+                        }
+                    }
+                });
                 $("#supersedePanel").dialog("open");
+            }
+
+            function supersedeDocuments(uri) {
+                $.ajax({
+                    type: "PUT",
+                    url: uri,
+                    dataType: "json",
+                    data: JSON.stringify({ "documentNo": $("#documentNo").val(), "title": $("#title").val(), "revision": $("#revision").val() })
+                }).success(function(response) {
+                });
+
             }
 
             function getHistory(uri) {
