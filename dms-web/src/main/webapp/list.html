@@ -16,8 +16,8 @@
                 $( "#documentActionPanel" ).dialog({
                     autoOpen: false
                 });
-                $( "button" ).button().click(function( event ) {
-                    showActionPanel("", "", "", "uri")
+                $( "button" ).button().click(function(event) {
+                    showRegister("", "", "", "http://localhost:8080/dms/docs")
                 });
                 loadDocuments();
             });
@@ -45,7 +45,7 @@
                         cell.appendTo(row);
                         var supersedeLink = dto.links.filter(function (element, index, array) { return (element.rel == "supersede"); });
                         if (supersedeLink.length > 0) {
-                            cell.append($("<a href='javascript:showActionPanel(&quot;" + doc.documentNo +
+                            cell.append($("<a href='javascript:showSupersede(&quot;" + doc.documentNo +
                                     "&quot;, &quot;" + doc.title + "&quot;, &quot;" + doc.revision + "&quot;, &quot;" + supersedeLink[0].uri + "&quot;);'>Supersede</a>"));
                         }
                         var historyLink = dto.links.filter(function (element, index, array) { return (element.rel == "history"); });
@@ -58,7 +58,21 @@
 
             }
 
-            function showActionPanel(documentNo, title, revision, uri) {
+            function showSupersede(documentNo, title, revision, uri) {
+                showActionPanel(documentNo, title, revision, "Supersede", function() {
+                                            performAction("PUT", uri);
+                                            $(this).dialog("close");
+                                        });
+            }
+
+            function showRegister(documentNo, title, revision, uri) {
+                showActionPanel(documentNo, title, revision, "Register", function() {
+                        performAction("POST", uri);
+                        $(this).dialog("close");
+                    });
+            }
+
+            function showActionPanel(documentNo, title, revision, dialogTitle, action) {
                 $("#documentNo").val(documentNo);
                 $("#title").val(title);
                 $("#revision").val(revision);
@@ -67,18 +81,27 @@
                     width: "50%",
                     modal: true,
                     buttons: {
-                        "Supersede": function() {
-                            supersedeDocuments(uri);
-                            $(this).dialog("close");
-                        }
+                        "OK": action
                     }
                 });
                 $("#documentActionPanel").dialog("open");
             }
 
-            function supersedeDocuments(uri) {
+            function performAction(method, uri) {
                 $.ajax({
-                    type: "PUT",
+                    type: method,
+                    url: uri,
+                    contentType: "application/json",
+                    data: JSON.stringify({ "documentNo": $("#documentNo").val(), "title": $("#title").val(), "revision": $("#revision").val() }),
+                    success: function(data) {
+                            loadDocuments();
+                        }
+                });
+            }
+
+            function registerDocument(uri) {
+                $.ajax({
+                    type: "POST",
                     url: uri,
                     contentType: "application/json",
                     data: JSON.stringify({ "documentNo": $("#documentNo").val(), "title": $("#title").val(), "revision": $("#revision").val() }),
