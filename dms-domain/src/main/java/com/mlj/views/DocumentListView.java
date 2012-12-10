@@ -1,13 +1,13 @@
 package com.mlj.views;
 
-import com.mlj.documents.Document;
-import com.mlj.documents.DocumentRepository;
+import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.newHashSet;
+import com.mlj.documents.Document;
+import com.mlj.documents.DocumentRepository;
 
 public class DocumentListView {
 
@@ -20,7 +20,7 @@ public class DocumentListView {
     public List<DocumentResource> list() {
         List<DocumentResource> result = new ArrayList<DocumentResource>();
         for (Document document : repository.allDocuments()) {
-            result.add(new DocumentResource(dtoFor(document), historyLinkFor(document)));
+            result.add(new DocumentResource(dtoFor(document), linksFor(document)));
         }
         return result;
     }
@@ -30,8 +30,11 @@ public class DocumentListView {
                 document.getTitle(), document.getRevision());
     }
 
-    private Set<Link> historyLinkFor(Document document) {
-        return newHashSet(new Link("history", "http://localhost:8080/dms/docs/"+document.getDocumentId() + "/history"));
+    private Set<Link> linksFor(Document document) {
+        return newHashSet(
+                new Link("history", "http://localhost:8080/dms/docs/"+document.getDocumentId() + "/history"),
+                new Link("supersede", "http://localhost:8080/dms/docs/"+document.getDocumentId())
+        );
     }
 
 }

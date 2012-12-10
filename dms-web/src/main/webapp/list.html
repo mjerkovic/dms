@@ -13,6 +13,24 @@
                     width: "80%",
                     modal: true
                 });
+                $( "#supersedePanel" ).dialog({
+                    autoOpen: false,
+                    height: "auto",
+                    width: "50%",
+                    modal: true,
+                    close: function(event, ui) {
+                        loadDocuments();
+                    },
+                    buttons: {
+                        "Supersede": function() {
+                            $(this).dialog("close")
+                        }
+                    }
+                });
+                loadDocuments();
+            });
+
+            function loadDocuments() {
                 $.ajax({
                     url: "/dms/docs",
                     dataType: "json"
@@ -20,20 +38,38 @@
                     createRows(html, "#results", true);
                     $('#results tbody tr:even').addClass('zebra');
                 });
-            });
+            }
 
-            function createRows(response, table, includeHistoryLink) {
+            function createRows(response, table, includeLinks) {
                 response.map(function(dto) {
                     var row = $("<tr />");
-                    $("<td />").text(dto.document.documentNo).appendTo(row);
-                    $("<td />").text(dto.document.title).appendTo(row);
-                    $("<td />").text(dto.document.revision).appendTo(row);
-                    if (includeHistoryLink) {
-                        $("<td />").append($("<a href='javascript:getHistory(&quot;" + dto.links[0].uri + "&quot;);'>History</a>")).appendTo(row);
+                    var doc = dto.document;
+                    $("<td />").text(doc.documentNo).appendTo(row);
+                    $("<td />").text(doc.title).appendTo(row);
+                    $("<td />").text(doc.revision).appendTo(row);
+                    if (includeLinks) {
+                        var cell = $("<td />");
+                        cell.appendTo(row);
+                        var supersedeLink = dto.links.filter(function (element, index, array) { return (element.rel == "supersede"); });
+                        if (supersedeLink.length > 0) {
+                            cell.append($("<a href='javascript:showSupersede(&quot;" + doc.documentNo +
+                                    "&quot;, &quot;" + doc.title + "&quot;, &quot;" + doc.revision + "&quot;, &quot;" + supersedeLink[0].uri + "&quot;);'>Supersede</a>"));
+                        }
+                        var historyLink = dto.links.filter(function (element, index, array) { return (element.rel == "history"); });
+                        if (historyLink.length > 0) {
+                            cell.append($("<a href='javascript:getHistory(&quot;" + historyLink[0].uri + "&quot;);'>History</a>"));
+                        }
                     }
                     row.appendTo(table);
                 });
 
+            }
+
+            function showSupersede(documentNo, title, revision, uri) {
+                $("#documentNo").val(documentNo);
+                $("#title").val(title);
+                $("#revision").val(revision);
+                $("#supersedePanel").dialog("open");
             }
 
             function getHistory(uri) {
@@ -43,7 +79,7 @@
                 }).success(function(response) {
                     $('#historyTable tbody tr:even').addClass('zebra');
                     createRows(response, "#historyTable", false);
-                    $( "#dialog-modal" ).dialog("open");
+                    $("#dialog-modal").dialog("open");
                 });
             }
 
@@ -55,9 +91,30 @@
             <tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr>
         </table>
 
-        <div id="dialog-modal" title="Basic modal dialog">
+        <div id="dialog-modal" title="Document History">
             <table id="historyTable">
                 <tr><th>Document No.</th><th>Title</th><th>Revision</th></tr>
+            </table>
+        </div>
+
+        <div id="supersedePanel" title="Supersede Document">
+            <table id="supersedeTable">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Document No.</td>
+                            <td><input id="documentNo" type="text" size="20"/></td>
+                        </tr>
+                        <tr>
+                            <td>Title</td>
+                            <td><input id="title" type="text" size="50"/></td>
+                        </tr>
+                        <tr>
+                            <td>Revision</td>
+                            <td><input id="revision" type="text" size="5"/></td>
+                        </tr>
+                    </tbody>
+                </table>
             </table>
         </div>
 
