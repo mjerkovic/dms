@@ -16,6 +16,9 @@
                 $( "#documentActionPanel" ).dialog({
                     autoOpen: false
                 });
+                $( "button" ).button().click(function( event ) {
+                    showActionPanel("", "", "", "uri")
+                });
                 loadDocuments();
             });
 
@@ -42,7 +45,7 @@
                         cell.appendTo(row);
                         var supersedeLink = dto.links.filter(function (element, index, array) { return (element.rel == "supersede"); });
                         if (supersedeLink.length > 0) {
-                            cell.append($("<a href='javascript:showSupersede(&quot;" + doc.documentNo +
+                            cell.append($("<a href='javascript:showActionPanel(&quot;" + doc.documentNo +
                                     "&quot;, &quot;" + doc.title + "&quot;, &quot;" + doc.revision + "&quot;, &quot;" + supersedeLink[0].uri + "&quot;);'>Supersede</a>"));
                         }
                         var historyLink = dto.links.filter(function (element, index, array) { return (element.rel == "history"); });
@@ -55,7 +58,7 @@
 
             }
 
-            function showSupersede(documentNo, title, revision, uri) {
+            function showActionPanel(documentNo, title, revision, uri) {
                 $("#documentNo").val(documentNo);
                 $("#title").val(title);
                 $("#revision").val(revision);
@@ -99,7 +102,8 @@
         </script>
     </head>
     <body>
-        <br/>
+        <button>Register</button>
+
         <table id="results">
             <thead><tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr></thead>
             <tbody></tbody>
@@ -116,16 +120,16 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td>Document No.</td>
-                            <td><input id="documentNo" type="text" size="20"/></td>
+                            <td class="actionCell">Document No.</td>
+                            <td class="actionCell"><input id="documentNo" type="text" size="20"/></td>
                         </tr>
                         <tr>
-                            <td>Title</td>
-                            <td><input id="title" type="text" size="50"/></td>
+                            <td class="actionCell">Title</td>
+                            <td class="actionCell"><input id="title" type="text" size="50"/></td>
                         </tr>
                         <tr>
-                            <td>Revision</td>
-                            <td><input id="revision" type="text" size="5"/></td>
+                            <td class="actionCell">Revision</td>
+                            <td class="actionCell"><input id="revision" type="text" size="5"/></td>
                         </tr>
                     </tbody>
                 </table>
