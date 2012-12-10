@@ -13,7 +13,7 @@
                     width: "80%",
                     modal: true
                 });
-                $( "#supersedePanel" ).dialog({
+                $( "#documentActionPanel" ).dialog({
                     autoOpen: false
                 });
                 loadDocuments();
@@ -24,12 +24,13 @@
                     url: "/dms/docs",
                     dataType: "json"
                 }).success(function(html) {
-                    createRows(html, "#results", true);
+                    createRows(html, "#results tbody", true);
                     $('#results tbody tr:even').addClass('zebra');
                 });
             }
 
             function createRows(response, table, includeLinks) {
+                $(table + " tr").remove();
                 response.map(function(dto) {
                     var row = $("<tr />");
                     var doc = dto.document;
@@ -58,28 +59,30 @@
                 $("#documentNo").val(documentNo);
                 $("#title").val(title);
                 $("#revision").val(revision);
-                $( "#supersedePanel" ).dialog({
+                $( "#documentActionPanel" ).dialog({
                     height: "auto",
                     width: "50%",
                     modal: true,
                     buttons: {
                         "Supersede": function() {
                             supersedeDocuments(uri);
+                            $(this).dialog("close");
                         }
                     }
                 });
-                $("#supersedePanel").dialog("open");
+                $("#documentActionPanel").dialog("open");
             }
 
             function supersedeDocuments(uri) {
                 $.ajax({
                     type: "PUT",
                     url: uri,
-                    dataType: "json",
-                    data: JSON.stringify({ "documentNo": $("#documentNo").val(), "title": $("#title").val(), "revision": $("#revision").val() })
-                }).success(function(response) {
+                    contentType: "application/json",
+                    data: JSON.stringify({ "documentNo": $("#documentNo").val(), "title": $("#title").val(), "revision": $("#revision").val() }),
+                    success: function(data) {
+                            loadDocuments();
+                        }
                 });
-
             }
 
             function getHistory(uri) {
@@ -98,7 +101,8 @@
     <body>
         <br/>
         <table id="results">
-            <tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr>
+            <thead><tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
         </table>
 
         <div id="dialog-modal" title="Document History">
@@ -107,8 +111,8 @@
             </table>
         </div>
 
-        <div id="supersedePanel" title="Supersede Document">
-            <table id="supersedeTable">
+        <div id="documentActionPanel" title="Supersede Document">
+            <table id="documentFieldsTable">
                 <table>
                     <tbody>
                         <tr>
