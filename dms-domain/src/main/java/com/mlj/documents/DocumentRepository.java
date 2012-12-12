@@ -1,13 +1,16 @@
 package com.mlj.documents;
 
-import com.google.common.collect.Lists;
-import com.mlj.events.Event;
-import com.mlj.events.EventStore;
-
-import java.util.*;
-
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.reverse;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import com.mlj.events.Event;
+import com.mlj.events.EventStore;
 
 public class DocumentRepository {
 
@@ -30,7 +33,8 @@ public class DocumentRepository {
     }
 
     private void store(Document document) {
-        eventStore.store(document);
+        eventStore.store(document.getUncommittedEvents());
+        document.markCommitted();
     }
 
     public Document retrieveDocument(String id) {
