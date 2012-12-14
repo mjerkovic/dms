@@ -6,9 +6,20 @@
 
     <bean id="eventStore" class="com.mlj.events.EventStore"/>
 
-    <bean id="documentFactory" class="com.mlj.documents.DocumentFactory"/>
+    <bean id="eventObserver" class="com.mlj.documents.PersistingEventObserver">
+        <constructor-arg ref="eventStore"/>
+    </bean>
+
+    <bean id="documentFactory" class="com.mlj.documents.DocumentFactory">
+        <constructor-arg ref="eventObserver"/>
+    </bean>
 
     <bean id="documentRepository" class="com.mlj.documents.DocumentRepository">
+        <constructor-arg ref="eventStore"/>
+        <constructor-arg ref="documentFactory"/>
+    </bean>
+
+    <bean id="documentDtoRepository" class="com.mlj.views.DocumentDtoRepository">
         <constructor-arg ref="eventStore"/>
     </bean>
 
@@ -18,11 +29,11 @@
     </bean>
 
     <bean id="documentListView" class="com.mlj.views.DocumentListView">
-        <constructor-arg ref="documentRepository"/>
+        <constructor-arg ref="documentDtoRepository"/>
     </bean>
 
     <bean id="documentHistoryView" class="com.mlj.views.DocumentHistoryView">
-        <constructor-arg ref="documentRepository"/>
+        <constructor-arg ref="documentDtoRepository"/>
     </bean>
 
 

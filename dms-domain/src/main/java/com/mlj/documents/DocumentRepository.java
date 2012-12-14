@@ -25,28 +25,4 @@ public class DocumentRepository {
         return documentFactory.createDocumentWith(eventStore.eventsFor(id));
     }
 
-    public List<Document> allDocuments() {
-        List<Document> result = new ArrayList<Document>();
-        for (Map.Entry<String, Collection<Event>> events : eventStore.allEvents().entrySet()) {
-            result.add(documentFactory.createDocumentWith(newArrayList(events.getValue())));
-        }
-        return result;
-    }
-
-    public List<Document> historyFor(String documentId) {
-        List<Document> documentHistory = newArrayList();
-        Document document = new Document(documentId);
-        for (Event event : eventStore.eventsFor(documentId)) {
-            if (event instanceof DocumentRegistered) {
-                document = document.apply((DocumentRegistered) event);
-            } else if (event instanceof DocumentSuperseded) {
-                document = document.apply((DocumentSuperseded) event);
-            }
-            document.markCommitted();
-            documentHistory.add(document);
-        }
-        return reverse(documentHistory);
-    }
-
-
 }

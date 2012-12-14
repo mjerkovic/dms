@@ -23,4 +23,15 @@ public class DocumentState {
         return documentId;
     }
 
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
 }
