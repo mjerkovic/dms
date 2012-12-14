@@ -2,13 +2,13 @@ package com.mlj.documents;
 
 import com.mlj.events.Event;
 
-public class DocumentRegisteredEvent extends Event {
+public class DocumentRegistered extends Event {
 
     private String documentNo;
     private final String title;
     private final String revision;
 
-    public DocumentRegisteredEvent(String documentId, String documentNo, String title, String revision) {
+    public DocumentRegistered(String documentId, String documentNo, String title, String revision) {
         super(documentId);
         this.documentNo = documentNo;
         this.title = title;

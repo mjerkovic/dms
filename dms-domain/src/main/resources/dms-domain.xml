@@ -6,12 +6,15 @@
 
     <bean id="eventStore" class="com.mlj.events.EventStore"/>
 
+    <bean id="documentFactory" class="com.mlj.documents.DocumentFactory"/>
+
     <bean id="documentRepository" class="com.mlj.documents.DocumentRepository">
         <constructor-arg ref="eventStore"/>
     </bean>
 
     <bean id="documentRegistrationService" class="com.mlj.documents.DocumentRegistrationService">
         <constructor-arg ref="documentRepository"/>
+        <constructor-arg ref="documentFactory"/>
     </bean>
 
     <bean id="documentListView" class="com.mlj.views.DocumentListView">
@@ -21,5 +24,6 @@
     <bean id="documentHistoryView" class="com.mlj.views.DocumentHistoryView">
         <constructor-arg ref="documentRepository"/>
     </bean>
+
 
 </beans>

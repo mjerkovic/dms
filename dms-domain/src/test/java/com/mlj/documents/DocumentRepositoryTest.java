@@ -10,7 +10,7 @@ public class DocumentRepositoryTest {
 
     @Before
     public void givenADocumentRepository() {
-        documentRepository = new DocumentRepository(new EventStore());
+        documentRepository = new DocumentRepository(new EventStore(), documentFactory);
     }
 
     @Test

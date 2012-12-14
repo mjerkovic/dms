@@ -23,7 +23,7 @@ public class DocumentRegistrationServiceTest {
     @Before
     public void givenADocumentRegistrationService() {
         documentRepository = mock(DocumentRepository.class);
-        registrationService = new DocumentRegistrationService(documentRepository);
+        registrationService = new DocumentRegistrationService(documentRepository, documentFactory);
     }
 
     @Test

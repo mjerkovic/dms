@@ -1,5 +1,7 @@
 package com.mlj.events;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +13,12 @@ public class EventStore {
 
     private final Multimap<String, Event> events = ArrayListMultimap.create();
 
-    public void store(List<Event> newEvents) {
-        for (Event event : newEvents) {
-            events.put(event.getId(), event);
-        }
+    public void store(Event event) {
+        events.put(event.getId(), event);
     }
 
-    public Collection<Event> eventsFor(String id) {
-        return events.get(id);
+    public List<Event> eventsFor(String id) {
+        return newArrayList(events.get(id));
     }
 
     public Map<String, Collection<Event>> allEvents() {
