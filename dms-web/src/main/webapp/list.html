@@ -7,18 +7,19 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
-                $( "#dialog-modal" ).dialog({
+                $("#dialog-modal").dialog({
                     autoOpen: false,
                     height: "auto",
                     width: "80%",
                     modal: true
                 });
-                $( "#documentActionPanel" ).dialog({
+                $("#documentActionPanel").dialog({
                     autoOpen: false
                 });
-                $( "button" ).button().click(function(event) {
+                $("button").button().click(function(event) {
                     showRegister("", "", "", "http://localhost:8080/dms/docs")
                 });
+                $("#tabs").tabs();
                 loadDocuments();
             });
 
@@ -28,7 +29,6 @@
                     dataType: "json"
                 }).success(function(html) {
                     createRows(html, "#results tbody", true);
-                    $('#results tbody tr:even').addClass('zebra');
                 });
             }
 
@@ -100,18 +100,6 @@
                 });
             }
 
-            function registerDocument(uri) {
-                $.ajax({
-                    type: "POST",
-                    url: uri,
-                    contentType: "application/json",
-                    data: JSON.stringify({ "documentNo": $("#documentNo").val(), "title": $("#title").val(), "revision": $("#revision").val() }),
-                    success: function(data) {
-                            loadDocuments();
-                        }
-                });
-            }
-
             function getHistory(uri) {
                 $.ajax({
                     url: uri,
@@ -126,12 +114,22 @@
         </script>
     </head>
     <body>
-        <button>Register</button>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tab1">Documents</a></li>
+                <li><a href="#tab2">History</a></li>
+            </ul>
+            <div id="tab1">
+                <button>Register</button>
+                <table id="results">
+                    <thead><tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="tab2">
 
-        <table id="results">
-            <thead><tr><th>Document No.</th><th>Title</th><th>Revision</th><th>Actions</th></tr></thead>
-            <tbody></tbody>
-        </table>
+            </div>
+        </div>
 
         <div id="dialog-modal" title="Document History">
             <table id="historyTable">
