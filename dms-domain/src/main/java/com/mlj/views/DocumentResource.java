@@ -1,5 +1,8 @@
 package com.mlj.views;
 
+import com.google.common.collect.Maps;
+
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -7,18 +10,18 @@ import static com.google.common.collect.Sets.newHashSet;
 public class DocumentResource {
 
     private final DocumentDto document;
-    private final Set<Link> links;
+    private final Map<String, Link> links;
 
-    public DocumentResource(DocumentDto document, Set<Link> links) {
+    public DocumentResource(DocumentDto document, Map<String, Link> links) {
         this.document = document;
-        this.links = newHashSet(links);
+        this.links = Maps.newHashMap(links);
     }
 
     public DocumentDto getDocument() {
         return document;
     }
 
-    public Set<Link> getLinks() {
+    public Map<String, Link> getLinks() {
         return links;
     }
 

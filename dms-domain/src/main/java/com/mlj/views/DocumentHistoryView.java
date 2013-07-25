@@ -1,5 +1,7 @@
 package com.mlj.views;
 
+import com.google.common.collect.Maps;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class DocumentHistoryView {
     public List<DocumentResource> history(String documentId) {
         List<DocumentResource> documentResources = newArrayList();
         for (DocumentDto document : repository.historyFor(documentId)) {
-            documentResources.add(new DocumentResource(document, Collections.<Link>emptySet()));
+            documentResources.add(new DocumentResource(document, Maps.<String, Link>newHashMap()));
         }
         return documentResources;
     }

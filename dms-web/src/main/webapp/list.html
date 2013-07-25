@@ -43,15 +43,9 @@
                     if (includeLinks) {
                         var cell = $("<td />");
                         cell.appendTo(row);
-                        var supersedeLink = dto.links.filter(function (element, index, array) { return (element.rel == "supersede"); });
-                        if (supersedeLink.length > 0) {
                             cell.append($("<a href='javascript:showSupersede(&quot;" + doc.documentNo +
-                                    "&quot;, &quot;" + doc.title + "&quot;, &quot;" + doc.revision + "&quot;, &quot;" + supersedeLink[0].uri + "&quot;);'>Supersede</a>"));
-                        }
-                        var historyLink = dto.links.filter(function (element, index, array) { return (element.rel == "history"); });
-                        if (historyLink.length > 0) {
-                            cell.append($("<a href='javascript:getHistory(&quot;" + historyLink[0].uri + "&quot;);'>History</a>"));
-                        }
+                                    "&quot;, &quot;" + doc.title + "&quot;, &quot;" + doc.revision + "&quot;, &quot;" + dto.links["supersede"].uri + "&quot;);'>Supersede</a>"));
+                            cell.append($("<a href='javascript:getHistory(&quot;" + dto.links["history"].uri + "&quot;);'>History</a>"));
                     }
                     row.appendTo(table);
                 });
